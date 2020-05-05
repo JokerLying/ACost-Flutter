@@ -1,13 +1,18 @@
-import 'package:acost/calculate_component.dart';
+import 'package:acost/model/packet.dart';
+import 'package:acost/state/price_model.dart';
+import 'package:acost/widget/calculate_component.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(ChangeNotifierProvider(
+      create: (context) => PriceModel(),
+      child: MyApp(),
+    ));
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
@@ -24,19 +29,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  void _inputOperation(var operation) {
+    if ("1" == operation) {
+      _addPacket();
+    }
   }
 
-  void inputOperation(var operation) {
-    if ("1" == operation) {
-      _incrementCounter();
-      _incrementCounter();
-    }
+  void _addPacket() {
+    var priceModel = Provider.of<PriceModel>(context, listen: false);
+    priceModel.addPacket(new Packet("lambda", "cost"));
   }
 
   @override
@@ -57,11 +58,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         CalculateComponent(
-                            title: "1", onPressed: () => inputOperation("1")),
+                            title: "1", onPressed: () => _inputOperation("1")),
                         CalculateComponent(
-                            title: "2", onPressed: () => inputOperation("2")),
+                            title: "2", onPressed: () => _inputOperation("2")),
                         CalculateComponent(
-                            title: "3", onPressed: () => inputOperation("3")),
+                            title: "3", onPressed: () => _inputOperation("3")),
                       ],
                     ),
                   ),
@@ -71,11 +72,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         CalculateComponent(
-                            title: "4", onPressed: () => inputOperation("4")),
+                            title: "4", onPressed: () => _inputOperation("4")),
                         CalculateComponent(
-                            title: "5", onPressed: () => inputOperation("5")),
+                            title: "5", onPressed: () => _inputOperation("5")),
                         CalculateComponent(
-                            title: "6", onPressed: () => inputOperation("6")),
+                            title: "6", onPressed: () => _inputOperation("6")),
                       ],
                     ),
                   ),
@@ -85,11 +86,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         CalculateComponent(
-                            title: "7", onPressed: () => inputOperation("7")),
+                            title: "7", onPressed: () => _inputOperation("7")),
                         CalculateComponent(
-                            title: "8", onPressed: () => inputOperation("8")),
+                            title: "8", onPressed: () => _inputOperation("8")),
                         CalculateComponent(
-                            title: "9", onPressed: () => inputOperation("9")),
+                            title: "9", onPressed: () => _inputOperation("9")),
                       ],
                     ),
                   ),
@@ -99,11 +100,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         CalculateComponent(
-                            title: "0", onPressed: () => inputOperation("0")),
+                            title: "0", onPressed: () => _inputOperation("0")),
                         CalculateComponent(
-                            title: ".", onPressed: () => inputOperation(".")),
+                            title: ".", onPressed: () => _inputOperation(".")),
                         CalculateComponent(
-                            title: "CE", onPressed: () => inputOperation("CE")),
+                            title: "CE",
+                            onPressed: () => _inputOperation("CE")),
                       ],
                     ),
                   ),
@@ -119,14 +121,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         flex: 3,
                         child: Row(children: <Widget>[
                           CalculateComponent(
-                              title: "+", onPressed: () => inputOperation("+"))
+                              title: "+", onPressed: () => _inputOperation("+"))
                         ])),
                     Expanded(
                         flex: 1,
                         child: Row(children: <Widget>[
                           CalculateComponent(
                               title: "AC",
-                              onPressed: () => inputOperation("AC"))
+                              onPressed: () => _inputOperation("AC"))
                         ]))
                   ])),
         ]);
@@ -172,20 +174,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(
                   flex: 1,
                   child: Container(
+                    width: double.infinity,
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text(
-                            "data" * 20,
-                            textAlign: TextAlign.end,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.teal[300],
-                              fontSize: 25,
-                            ),
-                          )
+                          Consumer<PriceModel>(
+                              builder: (context, priceList, child) {
+                            return Text(
+                              "${priceList.priceList.length}",
+                              textAlign: TextAlign.end,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.teal[300],
+                                fontSize: 25,
+                              ),
+                            );
+                          })
                         ]),
                   ),
                 ),
@@ -194,7 +201,10 @@ class _MyHomePageState extends State<MyHomePage> {
           flex: 4,
         ),
         Expanded(
-          child: Center(child: Text('$_counter')),
+          child: Center(
+              child: Consumer<PriceModel>(builder: (context, priceList, child) {
+            return Text('${priceList.priceList.length}');
+          })),
           flex: 6,
         ),
       ],
@@ -204,7 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
         body: new SafeArea(child: mainLayout),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Color(0xFF4DB6AC),
-          onPressed: _incrementCounter,
+          onPressed: _addPacket,
           elevation: 0,
           highlightElevation: 2,
           tooltip: 'Add Packet',
