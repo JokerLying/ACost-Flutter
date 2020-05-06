@@ -12,4 +12,8 @@ class PriceModel extends ChangeNotifier {
     _list.add(packet);
     notifyListeners();
   }
+
+  get size => _list.length;
+
+  getItem(i) => _list[i];
 }

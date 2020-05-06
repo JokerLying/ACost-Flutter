@@ -3,6 +3,7 @@ import 'package:acost/state/price_model.dart';
 import 'package:acost/widget/calculate_component.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:acost/widget/packet_component.dart';
 
 void main() => runApp(ChangeNotifierProvider(
       create: (context) => PriceModel(),
@@ -37,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addPacket() {
     var priceModel = Provider.of<PriceModel>(context, listen: false);
-    priceModel.addPacket(new Packet("lambda", "cost"));
+    priceModel.addPacket(new Packet("12+18+9", "17.5"));
   }
 
   @override
@@ -201,10 +202,17 @@ class _MyHomePageState extends State<MyHomePage> {
           flex: 4,
         ),
         Expanded(
-          child: Center(
-              child: Consumer<PriceModel>(builder: (context, priceList, child) {
-            return Text('${priceList.priceList.length}');
-          })),
+          child: Consumer<PriceModel>(builder: (context, priceList, child) {
+            return ListView.builder(
+                itemCount: priceList.size,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                      child:
+                          new PacketComponent(priceList.getItem(index), index),
+                      onTap: () => Scaffold.of(context).showSnackBar(
+                          SnackBar(content: Text(index.toString()))));
+                });
+          }),
           flex: 6,
         ),
       ],
