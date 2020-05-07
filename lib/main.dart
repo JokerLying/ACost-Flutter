@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addPacket() {
     var priceModel = Provider.of<PriceModel>(context, listen: false);
-    priceModel.addPacket(new Packet("12+18+9", "17.5"));
+    priceModel.addPacket(new Packet("0", "0.00"));
   }
 
   @override
@@ -104,8 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         CalculateComponent(
                             title: ".", onPressed: () => _inputOperation(".")),
                         CalculateComponent(
-                            title: "CE",
-                            onPressed: () => _inputOperation("CE")),
+                            title: "AC",
+                            onPressed: () => _inputOperation("AC")),
                       ],
                     ),
                   ),
@@ -127,8 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         flex: 1,
                         child: Row(children: <Widget>[
                           CalculateComponent(
-                              title: "AC",
-                              onPressed: () => _inputOperation("AC"))
+                              title: "CE",
+                              onPressed: () => _inputOperation("CE"))
                         ]))
                   ])),
         ]);
@@ -207,8 +207,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      child:
-                          new PacketComponent(priceModel.getItem(index), index, priceModel.selectedPosition == index),
+                      child: new PacketComponent(priceModel.getItem(index),
+                          index, priceModel.selectedPosition == index),
                       onTap: () {
                         priceModel.check(index);
                       });

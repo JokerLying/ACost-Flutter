@@ -27,9 +27,9 @@ class PacketComponentState extends State<PacketComponent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                "No.${widget.index} Packet",
+                widget.index == 0 ? "Real Cost" : "No.${widget.index} Packet",
                 style: TextStyle(
-                  color: widget.isCheck ? Colors.teal[500] : Colors.teal[300],
+                  color: widget.isCheck ? Colors.teal[600] : Colors.teal[300],
                   fontSize: 16,
                 ),
               ),
@@ -38,7 +38,7 @@ class PacketComponentState extends State<PacketComponent> {
                 widget.packet.lambda,
                 softWrap: true,
                 style: TextStyle(
-                  color: widget.isCheck ? Colors.teal[500] : Colors.teal[300],
+                  color: widget.isCheck ? Colors.teal[600] : Colors.teal[300],
                   fontSize: 15,
                 ),
               ),
@@ -52,7 +52,7 @@ class PacketComponentState extends State<PacketComponent> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: widget.isCheck ? Colors.teal[600] : Colors.teal[400],
+              color: widget.isCheck ? Colors.teal[700] : Colors.teal[400],
               fontSize: 20,
             ),
           )
