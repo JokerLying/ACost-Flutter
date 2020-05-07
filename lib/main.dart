@@ -31,9 +31,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   void _inputOperation(var operation) {
-    if ("1" == operation) {
-      _addPacket();
-    }
+    var priceModel = Provider.of<PriceModel>(context, listen: false);
+    priceModel.inputOperation(operation);
   }
 
   void _addPacket() {
@@ -202,15 +201,17 @@ class _MyHomePageState extends State<MyHomePage> {
           flex: 4,
         ),
         Expanded(
-          child: Consumer<PriceModel>(builder: (context, priceList, child) {
+          child: Consumer<PriceModel>(builder: (context, priceModel, child) {
             return ListView.builder(
-                itemCount: priceList.size,
+                itemCount: priceModel.size,
                 itemBuilder: (context, index) {
                   return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       child:
-                          new PacketComponent(priceList.getItem(index), index),
-                      onTap: () => Scaffold.of(context).showSnackBar(
-                          SnackBar(content: Text(index.toString()))));
+                          new PacketComponent(priceModel.getItem(index), index),
+                      onTap: () {
+                        priceModel.check(index);
+                      });
                 });
           }),
           flex: 6,

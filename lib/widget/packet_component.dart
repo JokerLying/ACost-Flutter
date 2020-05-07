@@ -17,12 +17,12 @@ class PacketComponentState extends State<PacketComponent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: new BoxDecoration(color: Colors.white10),
       padding: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Column(
+          Expanded(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
@@ -32,14 +32,19 @@ class PacketComponentState extends State<PacketComponent> {
                   fontSize: 16,
                 ),
               ),
+              SizedBox(height: 5),
               Text(
                 widget.packet.lambda,
+                softWrap: true,
                 style: TextStyle(
                   color: Colors.teal[300],
                   fontSize: 15,
                 ),
               ),
             ],
+          )),
+          SizedBox(
+            width: 10,
           ),
           Text(
             widget.packet.cost,
