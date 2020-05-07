@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class PacketComponent extends StatefulWidget {
   final Packet packet;
   final index;
+  final isCheck;
 
-  PacketComponent(this.packet, this.index);
+  PacketComponent(this.packet, this.index, this.isCheck);
 
   @override
   State<StatefulWidget> createState() {
@@ -28,7 +29,7 @@ class PacketComponentState extends State<PacketComponent> {
               Text(
                 "No.${widget.index} Packet",
                 style: TextStyle(
-                  color: Colors.teal[300],
+                  color: widget.isCheck ? Colors.teal[500] : Colors.teal[300],
                   fontSize: 16,
                 ),
               ),
@@ -37,7 +38,7 @@ class PacketComponentState extends State<PacketComponent> {
                 widget.packet.lambda,
                 softWrap: true,
                 style: TextStyle(
-                  color: Colors.teal[300],
+                  color: widget.isCheck ? Colors.teal[500] : Colors.teal[300],
                   fontSize: 15,
                 ),
               ),
@@ -51,7 +52,7 @@ class PacketComponentState extends State<PacketComponent> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: Colors.teal[400],
+              color: widget.isCheck ? Colors.teal[600] : Colors.teal[400],
               fontSize: 20,
             ),
           )

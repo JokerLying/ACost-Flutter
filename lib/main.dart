@@ -181,9 +181,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
                           Consumer<PriceModel>(
-                              builder: (context, priceList, child) {
+                              builder: (context, priceModel, child) {
                             return Text(
-                              "${priceList.priceList.length}",
+                              priceModel.getConsole(),
                               textAlign: TextAlign.end,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -208,7 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   return GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       child:
-                          new PacketComponent(priceModel.getItem(index), index),
+                          new PacketComponent(priceModel.getItem(index), index, priceModel.selectedPosition == index),
                       onTap: () {
                         priceModel.check(index);
                       });

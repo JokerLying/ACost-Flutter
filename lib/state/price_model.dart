@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:developer';
 
 import 'package:acost/model/packet.dart';
 import 'package:flutter/widgets.dart';
@@ -21,9 +22,22 @@ class PriceModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void check(i) => _selected = i;
+  void check(i) {
+    _selected = i;
+    notifyListeners();
+  }
 
   get size => _list.length;
 
+  getConsole() {
+    if (_list.length == 0) {
+      _list.add(new Packet("12+18+9", "17.5"));
+    }
+    List<String> items = _list[_selected].lambda.split("+");
+    return items[items.length - 1];
+  }
+
   getItem(i) => _list[i];
+
+  get selectedPosition => _selected;
 }
