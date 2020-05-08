@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _addPacket() {
     var priceModel = Provider.of<PriceModel>(context, listen: false);
-    priceModel.addPacket(new Packet("0", "0.00"));
+    priceModel.addPacket(new Packet("0", "0"));
   }
 
   @override
@@ -100,12 +100,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         CalculateComponent(
+                            title: "AC",
+                            onPressed: () => _inputOperation("AC")),
+                        CalculateComponent(
                             title: "0", onPressed: () => _inputOperation("0")),
                         CalculateComponent(
                             title: ".", onPressed: () => _inputOperation(".")),
-                        CalculateComponent(
-                            title: "AC",
-                            onPressed: () => _inputOperation("AC")),
                       ],
                     ),
                   ),
@@ -183,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Consumer<PriceModel>(
                               builder: (context, priceModel, child) {
                             return Text(
-                              priceModel.getConsole(),
+                              priceModel.console,
                               textAlign: TextAlign.end,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -205,13 +205,29 @@ class _MyHomePageState extends State<MyHomePage> {
             return ListView.builder(
                 itemCount: priceModel.size,
                 itemBuilder: (context, index) {
-                  return GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      child: new PacketComponent(priceModel.getItem(index),
-                          index, priceModel.selectedPosition == index),
-                      onTap: () {
-                        priceModel.check(index);
-                      });
+                  if (index == 0) {
+                    return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        child: new PacketComponent(priceModel.getItem(index),
+                            index, priceModel.position == index),
+                        onTap: () {
+                          priceModel.check(index);
+                        });
+                  } else {
+                    return Dismissible(
+                      key: Key(priceModel.getItem(index).id.toString()),
+                      child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          child: new PacketComponent(priceModel.getItem(index),
+                              index, priceModel.position == index),
+                          onTap: () {
+                            priceModel.check(index);
+                          }),
+                      onDismissed: (direction) {
+                        priceModel.remove(index);
+                      },
+                    );
+                  }
                 });
           }),
           flex: 6,

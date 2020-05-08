@@ -10,39 +10,52 @@ class PriceModel extends ChangeNotifier {
 
   UnmodifiableListView<Packet> get priceList => UnmodifiableListView(_list);
 
-  void addPacket(Packet packet) {
+  get size => _list.length;
+
+  get position => _selected;
+
+  String get console {
+    if (_list.length == 0) {
+      _list.add(new Packet("0", "0"));
+      _list.add(new Packet("0", "0"));
+    }
+    List<String> items = _list[_selected].lambda.split("+");
+    return items[items.length - 1];
+  }
+
+  addPacket(Packet packet) {
     _list.add(packet);
     _selected = _list.length - 1;
     notifyListeners();
   }
 
-  void inputOperation(var operation) {
+  inputOperation(var operation) {
     if ("1234567890".contains(operation)) {
-      inputNum(operation);
+      _inputNum(operation);
     }
     if ("." == operation) {
-      inputDot();
+      _inputDot();
     }
     if ("+" == operation) {
-      inputPlus();
+      _inputPlus();
     }
     if ("CE" == operation) {
-      inputCE();
+      _inputCE();
     }
     if ("AC" == operation) {
-      inputAC();
+      _inputAC();
     }
-    calculateCost();
+    _calculateCost();
     notifyListeners();
   }
 
-  void calculateCost() {
+  _calculateCost() {
     List<String> realCostItems = _list[0].lambda.split("+");
     var realCost = 0.0;
     for (var item in realCostItems) {
       realCost += double.parse(item);
     }
-    _list[0].cost = realCost.toStringAsFixed(2);
+    _list[0].cost = _updateCost(realCost.toStringAsFixed(2));
 
     var originalCost = 0.0;
     for (var i = 1; i < _list.length; i++) {
@@ -58,12 +71,23 @@ class PriceModel extends ChangeNotifier {
         itemCost += double.parse(item);
       }
       if (itemCost != 0) {
-        _list[i].cost = (itemCost / originalCost * realCost).toStringAsFixed(2);
+        _list[i].cost = _updateCost(
+            (itemCost / originalCost * realCost).toStringAsFixed(2));
       }
     }
   }
 
-  void inputNum(var numeral) {
+  String _updateCost(String cost) {
+    if (cost.endsWith(".00")) {
+      return cost.substring(0, cost.length - 3);
+    }
+    if (cost.endsWith("0")) {
+      return cost.substring(0, cost.length - 1);
+    }
+    return cost;
+  }
+
+  _inputNum(var numeral) {
     List<String> items = _list[_selected].lambda.split("+");
     String lastItem = items[items.length - 1];
     if (lastItem == "0") {
@@ -77,7 +101,7 @@ class PriceModel extends ChangeNotifier {
     }
   }
 
-  void inputDot() {
+  _inputDot() {
     List<String> items = _list[_selected].lambda.split("+");
     String lastItem = items[items.length - 1];
     if (!lastItem.endsWith(".") && !lastItem.contains(".")) {
@@ -86,12 +110,12 @@ class PriceModel extends ChangeNotifier {
     }
   }
 
-  void inputPlus() {
+  _inputPlus() {
     Packet selectedOne = _list[_selected];
     selectedOne.lambda += "+0";
   }
 
-  void inputCE() {
+  _inputCE() {
     List<String> items = _list[_selected].lambda.split("+");
     String lastItem = items[items.length - 1];
     if (lastItem == "0") {
@@ -116,29 +140,26 @@ class PriceModel extends ChangeNotifier {
     }
   }
 
-  void inputAC() {
+  _inputAC() {
     _list.clear();
-    _list.add(new Packet("0", "0.00"));
-    _list.add(new Packet("0", "0.00"));
+    _selected = 0;
+    _list.add(new Packet("0", "0"));
+    _list.add(new Packet("0", "0"));
   }
 
-  void check(i) {
+  check(i) {
     _selected = i;
     notifyListeners();
   }
 
-  get size => _list.length;
+  Packet getItem(i) => _list[i];
 
-  getConsole() {
-    if (_list.length == 0) {
-      _list.add(new Packet("0", "0.00"));
-      _list.add(new Packet("0", "0.00"));
+  remove(i) {
+    if (i <= _selected) {
+      _selected--;
     }
-    List<String> items = _list[_selected].lambda.split("+");
-    return items[items.length - 1];
+    _list.removeAt(i);
+    _calculateCost();
+    notifyListeners();
   }
-
-  getItem(i) => _list[i];
-
-  get selectedPosition => _selected;
 }
