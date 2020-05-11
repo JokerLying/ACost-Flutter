@@ -76,28 +76,28 @@ class Config {
   static ThemeData get _nightTheme {
     return new ThemeData(
       primarySwatch: Colors.blueGrey,
-      backgroundColor: Colors.blueGrey[900],
-      scaffoldBackgroundColor: Colors.blueGrey[900],
-      iconTheme: IconThemeData(color: Colors.blueGrey[900]),
-      bottomAppBarColor: Colors.blueGrey[500],
+      backgroundColor: Colors.grey[900],
+      scaffoldBackgroundColor: Colors.grey[900],
+      iconTheme: IconThemeData(color: Colors.grey[900]),
+      bottomAppBarColor: Colors.blueGrey[700],
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: Colors.blueGrey[600],
-        foregroundColor: Colors.blueGrey[900],
+        backgroundColor: Colors.blueGrey[800],
+        foregroundColor: Colors.grey[900],
       ),
       primaryTextTheme: TextTheme(
         bodyText1: TextStyle(
-          color: Colors.blueGrey[400],
+          color: Colors.blueGrey[300],
         ),
         bodyText2: TextStyle(
-          color: Colors.blueGrey[300],
+          color: Colors.blueGrey[200],
         ),
       ),
       accentTextTheme: TextTheme(
         bodyText1: TextStyle(
-          color: Colors.blueGrey[700],
+          color: Colors.blueGrey[600],
         ),
         bodyText2: TextStyle(
-          color: Colors.blueGrey[600],
+          color: Colors.blueGrey[500],
         ),
       ),
     );
