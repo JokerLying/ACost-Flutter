@@ -1,3 +1,4 @@
+import 'package:acost/common/config.dart';
 import 'package:acost/model/packet.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,9 @@ class PacketComponentState extends State<PacketComponent> {
               Text(
                 widget.index == 0 ? "Real Cost" : "No.${widget.index} Packet",
                 style: TextStyle(
-                  color: widget.isCheck ? Colors.teal[600] : Colors.teal[300],
+                  color: widget.isCheck
+                      ? Config.themeData.primaryTextTheme.bodyText1.color
+                      : Config.themeData.accentTextTheme.bodyText1.color,
                   fontSize: 16,
                 ),
               ),
@@ -38,7 +41,9 @@ class PacketComponentState extends State<PacketComponent> {
                 widget.packet.lambda,
                 softWrap: true,
                 style: TextStyle(
-                  color: widget.isCheck ? Colors.teal[600] : Colors.teal[300],
+                  color: widget.isCheck
+                      ? Config.themeData.primaryTextTheme.bodyText1.color
+                      : Config.themeData.accentTextTheme.bodyText1.color,
                   fontSize: 15,
                 ),
               ),
@@ -52,7 +57,9 @@ class PacketComponentState extends State<PacketComponent> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: widget.isCheck ? Colors.teal[700] : Colors.teal[400],
+              color: widget.isCheck
+                  ? Config.themeData.primaryTextTheme.bodyText2.color
+                  : Config.themeData.accentTextTheme.bodyText2.color,
               fontSize: 20,
             ),
           )

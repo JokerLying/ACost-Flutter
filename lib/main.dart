@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:acost/common/config.dart';
 import 'package:acost/model/packet.dart';
 import 'package:acost/state/price_model.dart';
 import 'package:acost/widget/calculate_component.dart';
@@ -5,24 +8,29 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:acost/widget/packet_component.dart';
 
-void main() => runApp(ChangeNotifierProvider(
-      create: (context) => PriceModel(),
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Config.loadConfig().then((darkMode) {
+    Config.setTheme();
+    runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => PriceModel()),
+      ],
       child: MyApp(),
     ));
+  });
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
-      home: MyHomePage(),
-    );
+    return MyHomePage();
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  final ScrollController _controller = new ScrollController();
+
   MyHomePage({Key key}) : super(key: key);
 
   @override
@@ -38,6 +46,15 @@ class _MyHomePageState extends State<MyHomePage> {
   void _addPacket() {
     var priceModel = Provider.of<PriceModel>(context, listen: false);
     priceModel.addPacket(new Packet("0", "0"));
+    Timer(
+        Duration(milliseconds: 100),
+        () => widget._controller.animateTo(
+              widget._controller.position.maxScrollExtent,
+              duration: Duration(
+                milliseconds: 400,
+              ),
+              curve: Curves.ease,
+            ));
   }
 
   @override
@@ -135,32 +152,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final bottomBar = BottomAppBar(
       shape: const CircularNotchedRectangle(),
-      color: Colors.teal[300],
-      child: IconTheme(
-        data: IconThemeData(color: Colors.white),
-        child: Row(children: [
-          IconButton(
-              icon: const Icon(Icons.brightness_2),
-              onPressed: () {
-                print('Menu button pressed');
-              }),
-          IconButton(
-              icon: Icon(Icons.translate),
-              onPressed: () {
-                print('Menu button pressed');
-              }),
-          IconButton(
-              icon: Icon(Icons.help_outline),
-              onPressed: () {
-                print('Menu button pressed');
-              }),
-          IconButton(
-              icon: Icon(Icons.error_outline),
-              onPressed: () {
-                print('Menu button pressed');
-              }),
-        ]),
-      ),
+      child: Row(children: [
+        IconButton(
+            icon: const Icon(Icons.brightness_2),
+            onPressed: () {
+              setState(() {
+                Config.changeThemeMode();
+              });
+            }),
+        IconButton(
+            icon: Icon(Icons.translate),
+            onPressed: () {
+              print('Menu button pressed');
+            }),
+        IconButton(
+            icon: Icon(Icons.help_outline),
+            onPressed: () {
+              print('Menu button pressed');
+            }),
+        IconButton(
+            icon: Icon(Icons.error_outline),
+            onPressed: () {
+              print('Menu button pressed');
+            }),
+      ]),
     );
 
     final mainLayout = Column(
@@ -188,7 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                color: Colors.teal[300],
+                                color: Config
+                                    .themeData.primaryTextTheme.bodyText1.color,
                                 fontSize: 25,
                               ),
                             );
@@ -203,6 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Expanded(
           child: Consumer<PriceModel>(builder: (context, priceModel, child) {
             return ListView.builder(
+                controller: widget._controller,
                 itemCount: priceModel.size,
                 itemBuilder: (context, index) {
                   if (index == 0) {
@@ -235,17 +252,19 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
-    return Scaffold(
-        body: new SafeArea(child: mainLayout),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0xFF4DB6AC),
-          onPressed: _addPacket,
-          elevation: 0,
-          highlightElevation: 2,
-          tooltip: 'Add Packet',
-          child: Icon(Icons.add),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        bottomNavigationBar: bottomBar);
+    return MaterialApp(
+      theme: Config.themeData,
+      home: Scaffold(
+          body: new SafeArea(child: mainLayout),
+          floatingActionButton: FloatingActionButton(
+            onPressed: _addPacket,
+            elevation: 0,
+            highlightElevation: 2,
+            tooltip: 'Add Packet',
+            child: Icon(Icons.add),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          bottomNavigationBar: bottomBar),
+    );
   }
 }

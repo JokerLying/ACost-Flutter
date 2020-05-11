@@ -1,3 +1,4 @@
+import 'package:acost/common/config.dart';
 import 'package:flutter/cupertino.dart';
 
 class CalculateComponent extends StatefulWidget {
@@ -18,7 +19,13 @@ class CalculateComponentState extends State<CalculateComponent> {
       child: Container(
         height: double.maxFinite,
         child: CupertinoButton(
-            child: Text(widget.title), onPressed: widget.onPressed),
+            child: Text(
+              widget.title,
+              style: TextStyle(
+                color: Config.themeData.primaryTextTheme.bodyText1.color,
+              ),
+            ),
+            onPressed: widget.onPressed),
       ),
     );
   }
