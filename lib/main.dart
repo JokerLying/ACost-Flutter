@@ -4,6 +4,7 @@ import 'package:acost/common/config.dart';
 import 'package:acost/model/packet.dart';
 import 'package:acost/state/price_model.dart';
 import 'package:acost/widget/calculate_component.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:acost/widget/packet_component.dart';
@@ -29,8 +30,6 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  final ScrollController _controller = new ScrollController();
-
   MyHomePage({Key key}) : super(key: key);
 
   @override
@@ -38,6 +37,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final ScrollController _controller = new ScrollController();
+  BuildContext _scaffoldContext;
+
   void _inputOperation(var operation) {
     var priceModel = Provider.of<PriceModel>(context, listen: false);
     priceModel.inputOperation(operation);
@@ -52,13 +54,40 @@ class _MyHomePageState extends State<MyHomePage> {
   void _scrollToBottom() {
     Timer(
         Duration(milliseconds: 100),
-        () => widget._controller.animateTo(
-              widget._controller.position.maxScrollExtent,
+        () => _controller.animateTo(
+              _controller.position.maxScrollExtent,
               duration: Duration(
                 milliseconds: 400,
               ),
               curve: Curves.ease,
             ));
+  }
+
+  void _showHelpDialog() {
+    showCupertinoDialog(
+        context: _scaffoldContext,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text(Config.chineseMode ? "帮助" : "Help"),
+            content: Text(Config.chineseMode
+                ? "\n本程序意在帮助您AA账单\n\nAC = 清除所有\nCE = 清除当前"
+                : "\nLet's split the bill.\n\nAC = All Clear\nCE = Clear Entry"),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(_scaffoldContext).pop();
+                },
+                child: Text(Config.chineseMode ? "知道了" : "Got it"),
+              ),
+            ],
+          );
+        });
+  }
+
+  void _showAboutDialog() {
+    Scaffold.of(_scaffoldContext).showSnackBar(SnackBar(
+      content: Text("Product with love by GnayUil"),
+    ));
   }
 
   @override
@@ -174,12 +203,12 @@ class _MyHomePageState extends State<MyHomePage> {
         IconButton(
             icon: Icon(Icons.help_outline),
             onPressed: () {
-              print('Menu button pressed');
+              _showHelpDialog();
             }),
         IconButton(
             icon: Icon(Icons.error_outline),
             onPressed: () {
-              print('Menu button pressed');
+              _showAboutDialog();
             }),
       ]),
     );
@@ -225,7 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Expanded(
           child: Consumer<PriceModel>(builder: (context, priceModel, child) {
             return ListView.builder(
-                controller: widget._controller,
+                controller: _controller,
                 itemCount: priceModel.size,
                 itemBuilder: (context, index) {
                   if (index == 0) {
@@ -261,7 +290,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return MaterialApp(
       theme: Config.themeData,
       home: Scaffold(
-          body: new SafeArea(child: mainLayout),
+          body: Builder(builder: (BuildContext context) {
+            _scaffoldContext = context;
+            return new SafeArea(child: mainLayout);
+          }),
           floatingActionButton: FloatingActionButton(
             onPressed: _addPacket,
             elevation: 0,
