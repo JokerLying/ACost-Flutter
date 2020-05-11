@@ -10,7 +10,7 @@ import 'package:acost/widget/packet_component.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Config.loadConfig().then((darkMode) {
+  Config.loadConfig().then((success) {
     Config.setTheme();
     runApp(MultiProvider(
       providers: [
@@ -46,6 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
   void _addPacket() {
     var priceModel = Provider.of<PriceModel>(context, listen: false);
     priceModel.addPacket(new Packet("0", "0"));
+    _scrollToBottom();
+  }
+
+  void _scrollToBottom() {
     Timer(
         Duration(milliseconds: 100),
         () => widget._controller.animateTo(
@@ -163,7 +167,9 @@ class _MyHomePageState extends State<MyHomePage> {
         IconButton(
             icon: Icon(Icons.translate),
             onPressed: () {
-              print('Menu button pressed');
+              setState(() {
+                Config.changeChineseMode();
+              });
             }),
         IconButton(
             icon: Icon(Icons.help_outline),

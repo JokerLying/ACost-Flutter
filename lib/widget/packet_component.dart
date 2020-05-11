@@ -27,13 +27,20 @@ class PacketComponentState extends State<PacketComponent> {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                widget.index == 0 ? "Real Cost" : "No.${widget.index} Packet",
-                style: TextStyle(
-                  color: widget.isCheck
-                      ? Config.themeData.primaryTextTheme.bodyText1.color
-                      : Config.themeData.accentTextTheme.bodyText1.color,
-                  fontSize: 16,
+              Container(
+                height: 20,
+                child: Text(
+                  widget.index == 0
+                      ? Config.chineseMode ? "实付金额" : "Real Cost"
+                      : Config.chineseMode
+                          ? "${widget.index}号篮子"
+                          : "No.${widget.index} Packet",
+                  style: TextStyle(
+                    color: widget.isCheck
+                        ? Config.themeData.primaryTextTheme.bodyText1.color
+                        : Config.themeData.accentTextTheme.bodyText1.color,
+                    fontSize: Config.chineseMode ? 14 : 16,
+                  ),
                 ),
               ),
               SizedBox(height: 5),
