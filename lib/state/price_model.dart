@@ -152,6 +152,13 @@ class PriceModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  copyOne(i) {
+    _selected = i;
+    Packet one = new Packet(_list[i].lambda, _list[i].cost);
+    _list.add(one);
+    notifyListeners();
+  }
+
   Packet getItem(i) => _list[i];
 
   remove(i) {

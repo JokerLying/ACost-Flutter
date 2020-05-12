@@ -259,22 +259,28 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      child: new PacketComponent(priceModel.getItem(index),
+                          index, priceModel.position == index),
+                      onTap: () {
+                        priceModel.check(index);
+                      },
+                    );
+                  } else {
+                    return Dismissible(
+                      key: Key(priceModel.getItem(index).id.toString()),
+                      child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         child: new PacketComponent(priceModel.getItem(index),
                             index, priceModel.position == index),
                         onTap: () {
                           priceModel.check(index);
-                        });
-                  } else {
-                    return Dismissible(
-                      key: Key(priceModel.getItem(index).id.toString()),
-                      child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          child: new PacketComponent(priceModel.getItem(index),
-                              index, priceModel.position == index),
-                          onTap: () {
-                            priceModel.check(index);
-                          }),
+                        },
+                        onLongPress: () {
+                          priceModel.copyOne(index);
+                          _scrollToBottom();
+                        },
+                      ),
                       onDismissed: (direction) {
                         priceModel.remove(index);
                       },
