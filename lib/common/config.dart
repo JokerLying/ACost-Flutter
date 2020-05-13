@@ -27,7 +27,7 @@ class Config {
 
   static _saveVibrateMode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("vibrate_mode", chineseMode);
+    prefs.setBool("vibrate_mode", vibrateMode);
   }
 
   static changeThemeMode() {
