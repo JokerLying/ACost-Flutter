@@ -156,6 +156,7 @@ class PriceModel extends ChangeNotifier {
     _selected = i;
     Packet one = new Packet(_list[i].lambda, _list[i].cost);
     _list.add(one);
+    _calculateCost();
     notifyListeners();
   }
 
