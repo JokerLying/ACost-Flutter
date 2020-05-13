@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:acost/widget/packet_component.dart';
+import 'package:vibrate/vibrate.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,11 +42,17 @@ class _MyHomePageState extends State<MyHomePage> {
   BuildContext _scaffoldContext;
 
   void _inputOperation(var operation) {
+    if (operation == "AC" || operation == "CE") {
+      if (Config.vibrateMode) Vibrate.feedback(FeedbackType.medium);
+    } else {
+      if (Config.vibrateMode) Vibrate.feedback(FeedbackType.light);
+    }
     var priceModel = Provider.of<PriceModel>(context, listen: false);
     priceModel.inputOperation(operation);
   }
 
   void _addPacket() {
+    if (Config.vibrateMode) Vibrate.feedback(FeedbackType.light);
     var priceModel = Provider.of<PriceModel>(context, listen: false);
     priceModel.addPacket(new Packet("0", "0"));
     _scrollToBottom();
@@ -190,6 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: const Icon(Icons.brightness_2),
             onPressed: () {
               setState(() {
+                if (Config.vibrateMode) Vibrate.feedback(FeedbackType.light);
                 Config.changeThemeMode();
               });
             }),
@@ -197,17 +205,28 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.translate),
             onPressed: () {
               setState(() {
+                if (Config.vibrateMode) Vibrate.feedback(FeedbackType.light);
                 Config.changeChineseMode();
+              });
+            }),
+        IconButton(
+            icon: Icon(Icons.vibration),
+            onPressed: () {
+              setState(() {
+                Config.changeVibrateMode();
+                if (Config.vibrateMode) Vibrate.feedback(FeedbackType.light);
               });
             }),
         IconButton(
             icon: Icon(Icons.help_outline),
             onPressed: () {
+              if (Config.vibrateMode) Vibrate.feedback(FeedbackType.light);
               _showHelpDialog();
             }),
         IconButton(
             icon: Icon(Icons.error_outline),
             onPressed: () {
+              if (Config.vibrateMode) Vibrate.feedback(FeedbackType.light);
               _showAboutDialog();
             }),
       ]),
@@ -263,6 +282,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: new PacketComponent(priceModel.getItem(index),
                           index, priceModel.position == index),
                       onTap: () {
+                        if (Config.vibrateMode)
+                          Vibrate.feedback(FeedbackType.light);
                         priceModel.check(index);
                       },
                     );
@@ -274,9 +295,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: new PacketComponent(priceModel.getItem(index),
                             index, priceModel.position == index),
                         onTap: () {
+                          if (Config.vibrateMode)
+                            Vibrate.feedback(FeedbackType.light);
                           priceModel.check(index);
                         },
                         onLongPress: () {
+                          if (Config.vibrateMode)
+                            Vibrate.feedback(FeedbackType.medium);
                           priceModel.copyOne(index);
                           _scrollToBottom();
                         },

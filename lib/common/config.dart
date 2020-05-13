@@ -4,12 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Config {
   static bool darkMode;
   static bool chineseMode;
+  static bool vibrateMode;
   static ThemeData themeData;
 
   static Future<bool> loadConfig() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     darkMode = prefs.getBool("dark_mode") ?? false;
     chineseMode = prefs.getBool("chinese_mode") ?? false;
+    vibrateMode = prefs.getBool("vibrate_mode") ?? true;
     return true;
   }
 
@@ -23,6 +25,11 @@ class Config {
     prefs.setBool("chinese_mode", chineseMode);
   }
 
+  static _saveVibrateMode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("vibrate_mode", chineseMode);
+  }
+
   static changeThemeMode() {
     darkMode = !darkMode;
     setTheme();
@@ -32,6 +39,11 @@ class Config {
   static changeChineseMode() {
     chineseMode = !chineseMode;
     _saveChineseMode();
+  }
+
+  static changeVibrateMode() {
+    vibrateMode = !vibrateMode;
+    _saveVibrateMode();
   }
 
   static setTheme() {
