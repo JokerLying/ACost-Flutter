@@ -8,6 +8,4 @@
 <img src="https://raw.githubusercontent.com/JokerLying/PicBed/master/img/20200519220432.png" width="40%" /> <img src="https://raw.githubusercontent.com/JokerLying/PicBed/master/img/20200519220443.png" width="40%" />
 
 #### 下载
-<a href="https://apps.apple.com/us/app/acost/id1513205221?mt=8" style="display:inline-block;overflow:hidden;background:url(https://linkmaker.itunes.apple.com/zh-cn/badge-lrg.svg?releaseDate=2020-05-14&kind=iossoftware&bubble=ios_apps) no-repeat;width:135px;height:40px;"></a>
-
 <a href="https://apps.apple.com/us/app/acost/id1513205221?mt=8"><img src="https://linkmaker.itunes.apple.com/zh-cn/badge-lrg.svg?releaseDate=2020-05-14&kind=iossoftware&bubble=ios_apps" width:135px height:40px /></a>
