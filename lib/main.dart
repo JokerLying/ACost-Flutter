@@ -319,6 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: Config.themeData,
       home: Scaffold(
           body: Builder(builder: (BuildContext context) {
