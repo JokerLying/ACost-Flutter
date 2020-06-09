@@ -240,7 +240,11 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               setState(() {
                 Config.changeVibrateMode();
-                if (Config.vibrateMode) Vibrate.feedback(FeedbackType.light);
+                if (Config.vibrateMode) {
+                  Vibrate.feedback(FeedbackType.light);
+                } else {
+                  Vibrate.feedback(FeedbackType.success);
+                }
               });
             }),
         IconButton(
