@@ -91,6 +91,32 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
+  void _showAllCleanDialog() {
+    showCupertinoDialog(
+        context: _scaffoldContext,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text(Config.chineseMode ? "确认" : "Confirm"),
+            content: Text(Config.chineseMode ? "\n确认清除所有内容？" : "\nAll Clear?"),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(_scaffoldContext).pop();
+                },
+                child: Text(Config.chineseMode ? "取消" : "Cancel"),
+              ),
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.of(_scaffoldContext).pop();
+                  _inputOperation("AC");
+                },
+                child: Text(Config.chineseMode ? "清除" : "Clear"),
+              ),
+            ],
+          );
+        });
+  }
+
   void _showAboutDialog() {
     Scaffold.of(_scaffoldContext).showSnackBar(SnackBar(
       content: Text("Product with love by GnayUil"),
@@ -158,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: <Widget>[
                         CalculateComponent(
                             title: "AC",
-                            onPressed: () => _inputOperation("AC")),
+                            onPressed: () => _showAllCleanDialog()),
                         CalculateComponent(
                             title: "0", onPressed: () => _inputOperation("0")),
                         CalculateComponent(
